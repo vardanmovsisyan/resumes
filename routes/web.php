@@ -11,23 +11,23 @@
 |
 */
 
-Route::get('/', [
-    'uses'=>'PeopleController@index',
-    'as'=>'resumes'
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+Route::get('/home',[
+    'uses'=>'HomeController@index',
+    'as'=>'login.check'
 ]);
-Route::get('/search', [
-    'uses'=>'PeopleController@index',
-    'as'=>'resumes'
+Route::get('/{name}',function(){
+    return redirect('/');
+})->where('name', '[login|register]');
+Route::post('/register/store', [
+    'uses'=>'Auth\RegisterController@store',
+    'as'=>'register.store'
 ]);
-Route::get('/create', [
-    'uses'=>'PeopleController@create',
-    'as'=>'resume.create'
+Route::post('/login/check',[
+    'uses'=>'Auth\LoginController@check',
+    'as'=>'login.check'
 ]);
-Route::post('/store', [
-    'uses'=>'PeopleController@store',
-    'as'=>'resume.store'
-]);
-Route::post('/search', [
-    'uses'=>'PeopleController@search',
-    'as'=>'resume.search'
-]);
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+

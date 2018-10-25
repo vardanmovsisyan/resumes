@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,6 +12,19 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['middleware' => 'api'], function(){
+    // Fetch Users
+    Route::get('users', function(){
+        return User::orderBy('created_at', 'desc')
+                                        ->get();
+    });
+    // VerifyUser
+    Route::post('user/{id}', function(Request $request, $id){
+        $user=User::findOrFail($id);
+        $user->verifiedByAdmin=($request->input('verified'))%2;
+        $user->save();
+    });
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
