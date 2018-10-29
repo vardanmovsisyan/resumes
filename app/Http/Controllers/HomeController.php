@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('verified_by_admin');
+    }
+
     public function index()
     {
-        if(($user = Auth::user()) && Auth::user()->verifiedByAdmin){
-            return view('home');
-        }
-        return view('welcome');
+        return view('home');
     }
 }

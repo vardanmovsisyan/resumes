@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use App\User;
 /*
@@ -16,16 +15,14 @@ Route::group(['middleware' => 'api'], function(){
     // Fetch Users
     Route::get('users', function(){
         return User::orderBy('created_at', 'desc')
-                                        ->get();
+            ->get();
     });
     // VerifyUser
-    Route::post('user/{id}', function(Request $request, $id){
-        $user=User::findOrFail($id);
-        $user->verifiedByAdmin=($request->input('verified'))%2;
-        $user->save();
-    });
+    Route::post('user/{id}', [
+        'uses'=>'Admin\DashboardController@verify',
+        'as'=>'admin.verify'
+    ]);
 });
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
